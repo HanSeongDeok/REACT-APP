@@ -15,12 +15,6 @@ const list = [{
 }
 ]
 
-function Header(props) {
-  return <header> 
-      <h1><a href="/"> {props.title} </a></h1>
-      </header>
-}
-
 function Article(props) {
   return <article>
       <h2>{props.test}</h2>
@@ -37,7 +31,12 @@ let Nav = (props) => {
   const combin_list = [];
   for(let i = 0; i < props.list.length; i++) {
     combin_list.push(<li key={props.list[i].id}>
-      <a href={'/read/'+ props.list[i].id}>{props.list[i].title}</a>
+      <a id={props.list[i].id} href={'/read/'+ props.list[i].id} onClick={event=>{
+        event.preventDefault();
+        props.onClick(event.target.id)
+        /*props.onClick(props.list[i].id)*/
+
+      }}>{props.list[i].title}</a>
       </li>)
   }  
   return <nav>
@@ -53,11 +52,20 @@ let Nav = (props) => {
 function App() {
   return (
     <div className="App">
-      <Header title="REACT"></Header>
-      <Nav list = {list}></Nav>
+      <Header title="REACT" onClick={()=>alert("IT IS HEADER!")}></Header>
+      <Nav list = {list} onClick={id=>alert(id)}></Nav>
       <Article test="WELCOME" bodies = "HELLO WROLD"></Article>
     </div>
   );
+}
+
+function Header(props) {
+  return <header> 
+      <h1><a href="/" onClick={(event) => {
+          event.preventDefault();
+          props.onClick();
+      }}> {props.title} </a></h1>
+      </header>
 }
 
 export default App;
